@@ -34,9 +34,9 @@ X = np.random.randn(5, 784).T #taken 5 tests, each of satndard mnist size (784, 
 def reLU(x):
     return np.maximum(x, 0)
 
-def onehot(Y):
-    y_onehot = np.zeros((Y.size, Y.max() + 1))
-    y_onehot[np.arange(Y.size), Y] = 1
+def onehot(Y):                       
+    y_onehot = np.zeros((Y.size, Y.max() + 1))      # Tbh, I didn't get how to implement this, so I imported
+    y_onehot[np.arange(Y.size), Y] = 1              # it from GeeksForGeeks
     return y_onehot.T
 
 def Initialise():
@@ -54,6 +54,18 @@ def Forward(w1, w2, b1, b2, X):
     a1 = reLU(z1)
     z2 = np.dot(w2, a1) + b2
     a2 = softmax(z2)
+
+def derivative_reLU(z)
+    return z > 0                      # In numpy, this condition returns boolean, which is matrix of 1s or 0s
     
-def BackPropagation(z1, z2, a1, a2, w2, Y):
+def BackPropagation(z1, z2, a1, a2,w1 w2,X, Y):
+    m = Y.size
+    one_hot_Y = onehot(Y)
+    diff_z2 = a2 - one_hot_Y
+    d_w2 = (1/m) * np.dot(diff_z2, a1.T)
+    d_b2 =  (1/m) * np.sum(diff_z2, axis = 1)
+
+    diff_z1 = np.dot(w2.T, diff_z2) * derivative_reLU(z1)
+    d_w1 = (1/m) * dot(diff_z1, X.T)
+    d_b1= (1/m) * np.sum(diff_z1, axis = 1)
     pass
