@@ -17,12 +17,16 @@
 
 > ### The Algorithm for Neural Netwrok v0
 >
-> This version will be simple as I am new to all this and also due due to time constraint I am facing. It will contain only 1 hidden layer and would have this structure:
+>> This version will be simple as I am new to all this and also due due to time constraint I am facing. It will contain only 1 hidden layer and would have this structure:
+>>
+>> Input Layer -----> Hidden layer (10 neurons) ----> Output layer
+>>
+>> This would result in a not-so-very efficient network with success rate of about 0.8 to 0.85 according to Gemini's prediction
 >
-> Input Layer -----> Hidden layer (10 neurons) ----> Output layer
->
-> This would result in a not-so-very efficient network with success rate of about 0.8 to 0.85 according to Gemini's prediction
->
-> This code works as:
 > 
+>### Problems faced
+> > Could not implement onehot function by myself. Fixed.
+> > Code becomes very complex and messy very quickly, difficulty in keeping track of all variables and function parameters. Still not sure about them all, as network is yet to test
+> > Forgot backprop formulas. Revisited the handwritten notes I made yesterday. Fixed.
+> > Still not very comfortable with shapes, have to think about them while writing every operation. **NOT FIXED**
 
