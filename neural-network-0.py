@@ -9,10 +9,10 @@ only 1 hidden layer as:
 
         Input Layer(784 paremeters) -------> hidden layer(64 neurons) ----------> output layer(10 activations)
 
-With this model, I asked Gemini to predict the success rate, and Gemini adivisis me to target atleast 80% 
+With this model, I asked Gemini to predict the success rate, and Gemini adivisis me to target atleast 90%, and with repeated
+executions, it will soar to over 95%
 
-If I complete this project and still have ample time, I will make an optimised version, maybe with less variables
-and better success rate by adding one more hidden layer
+If I complete this project and still have ample time, I will make an optimised version, adding some new features on the way too
 
 -----_____AFTERWORD_____-----
 
