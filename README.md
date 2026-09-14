@@ -31,6 +31,9 @@ cation or regression dataset. Show that the loss decreases during training. - **
 1.6 In your write-up, discuss any gradient mistakes you made and explain how you identified and
 fixed them. - **Complete**
 
+> #### Conclusion
+> Successfully wrote a python code on neural network whose base success rate is about 92% but can be increased to about 97% by running the code repeatedly
+
 ## References
 * *Neural Networks and Deep Learning* by Nielsen
 * 3B1B
