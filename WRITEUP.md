@@ -19,7 +19,7 @@
 >
 >> This version will be simple as I am new to all this and also due due to time constraint I am facing. It will contain only 1 hidden layer and would have this structure:
 >>
->> Input Layer -----> Hidden layer (10 neurons) ----> Output layer
+>> Input Layer -----> Hidden layer (64 neurons) ----> Output layer
 >>
 >> This would result in a not-so-very efficient network with success rate of about 0.8 to 0.85 according to Gemini's prediction
 >
@@ -30,3 +30,46 @@
 > > Forgot backprop formulas. Revisited the handwritten notes I made yesterday. Fixed.
 > > Still not very comfortable with shapes, have to think about them while writing every operation. **NOT FIXED**
 
+
+## Day 3 - Monday, September 14
+
+> ### Maths behind backprop
+> Before starting with today's progress, let me present you the math behind the curtains
+> We will start by deriving results for a simple network, and intuitively apply that to a complex network
+> > #### For a simple scenario
+> > Consider a neural network as : Input layer (1 parameter) ----> Hidden layer (1 neuron) ----> Output layer (1 neuron)
+> >
+> > Using chain rule, $$\frac{\partial L}{\partial w^{[2]}} = \frac{\partial L}{\partial a^{[2]}}.\frac{\partial a^{[2]}}{\partial z^{[2]}}.\frac{\partial z^{[2]}}{\partial w^{[2]}}$$
+> >  
+> > $$\frac{\partial L}{\partial a^{[2]}} = a^{[2]} - y$$
+> >
+> > $$\frac{\partial a^{[2]}}{\partial z^{[2]}} = f'(z)$$
+> >
+> > $$\frac{\partial z^{[2]}}{\partial w^{[2]}} = a^{[1]}$$
+> >  
+> >  where $$w$$ are weights of layers, $$b$$ is the bias, $$z^{[l]} = w^{[l]}a^{[l-1]} + b^{[l]}$$ and $$a$$ is the activation after putting $$z$$ in a non linearity
+> >
+> > Like these, we can derive contribution of any factor to the loss function by chain rule, which is used by computer to nudge these values in order to minimize loss function. But this is in form of scalars here, won't it be overly complex in real neural network with matrices and thousands of parameters? Well, not so much.
+> >
+> > ### For an actual network
+> > Consider the structure network I made for this project. Now I will use capital letters for variables as, now they are matrices, but still, chain rule is valid here too.
+> >
+> >  $$\frac{\partial L}{\partial Z^{[2]}} = A^{[2]} - Y$$
+> >
+> > $$\frac{\partial L}{\partial W^{[2]}} = \frac{1}{m} dZ^{[2]} \cdot (A^{[1]})^T$$
+> >
+> > It is essentially the same chain rule as the simplified case, but now that there are matrices, we have to use trnaspose to match the shapes, rest all same
+> >
+> > $$\frac{\partial L}{\partial b^{[2]}} = \frac{1}{m} \sum_{i=1}^{m} dZ^{[2]}$$
+> >
+> > $$\frac{\partial L}{\partial Z^{[1]}} = (W^{[2]})^T \cdot dZ^{[2]} * f'(Z^{[1]})$$
+> >
+> > Okay. so this is the math, now let's jump into coding.
+> >
+> ### Coding Progress
+> > Completed the code today, adding backpropagation entirely and gradient descent function.
+> > Also added as tracker, which tracks accuracy every 50 iterations
+> >
+> > Faced errors causing the accuracy to be 11% at 1st as well as 500th iteration. **Fixed**: Caused due to error in order of parameters given to `update_parameters()` functions. I now used the same sequence for parameters to not get confused.
+> >
+> > 
