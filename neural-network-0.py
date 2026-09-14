@@ -15,43 +15,52 @@ and better success rate by adding one more hidden layer
 
 """
 
-data = pd.read_csv('mnist_test.csv')
-data = np.array(data)
-m, n = shape(data)
+def load_csv(file_path):
+    data = pd.read_csv(file_path)
+    data = np.array(data)
 
-testing_data = data[0:1000].T
-test_Y = testing_data[0]
-test_X = testing_data[1:n]
+    testing_data = data[0:1000].T
+    test_Y = testing_data[0]
+    test_X = testing_data[1:785]
+    test_X = test_X/255
 
-training_data = data[1000:m].T
-train_Y = training_data[0]
-train_X=  training_data[1:m]
+    training_data = data[1000:].T
+    train_Y = training_data[0]
+    train_X=  training_data[1:785]
+    train_X = train_X/255
+
+    return train_X, train_Y, test_X, test_Y
 
 np.random.seed(0)
 
-X = np.random.randn(5, 784).T #taken 5 tests, each of satndard mnist size (784, obv)
+def Initialise():
+    w1 = np.random.randn(64, 784) * 0.1
+    b1 = np.random.randn(64, 1) * 0.1             #      Used * 0.1 to make sure x*w is small
+    w2  = np.random.randn(10, 64) * 0.1           #      and it dose not gets enlarged in the operation
+    b2 = np.random.randn(10, 1) * 0.1
+    return w1, b1, w2, b2
 
 def reLU(x):
     return np.maximum(x, 0)
 
-def onehot(Y):                       
-    y_onehot = np.zeros((Y.size, Y.max() + 1))      # Tbh, I didn't get how to implement this, so I imported
-    y_onehot[np.arange(Y.size), Y] = 1              # it from GeeksForGeeks
-    return y_onehot.T
+def one_hot(Y):
+    one_hot_Y = np.zeros((Y.size, Y.max() + 1))         # tbh, i didn't know how to code this, so I imported
+    one_hot_Y[np.arange(Y.size), Y] = 1                 # it from geeksforgeeks o_o
+    return one_hot_Y.T
 
-def Initialise():
-    w1 = np.random.randn(10, 784) - 0.5
-    b1 = np.random.randn(10, 1) - 0.5             #      Used - 0.5 to make sure x*w is small
-    w2  = np.random.randn(10, 10) - 0.5           #      and it dose not gets enlarged in the operation
-    b2 = np.random.randn(10, 1) - 0.5
-    return w1, w2, b1, b2
 
 def softmax(Z):
-    return np.exp(Z) / np.sum(np.exp(Z))
+    exp_Z = np.exp(Z - np.max(Z, axis=0, keepdims=True))
+    return exp_Z / np.sum(exp_Z, axis=0, keepdims=True)
 
-def Forward(w1, w2, b1, b2, X):     
+
+def Forward(w1, b1, w2, b2, X):
+
+    # Layer 1 (Hideen)     
     z1 = np.dot(w1, X) + b1
     a1 = reLU(z1)
+
+    # Layer 2 (Output)
     z2 = np.dot(w2, a1) + b2
     a2 = softmax(z2)
 
@@ -61,20 +70,20 @@ def Forward(w1, w2, b1, b2, X):
 def derivative_reLU(z):
     return z > 0                # In numpy, this condition returns boolean, which is matrix of 1s or 0s
     
-def BackPropagation(z1, z2, a1, a2,w1, w2,X, Y):     # mention to stackExchange for helping me out 
-    m = Y.size                                      # with these formulas for higher order matrices
-    one_hot_Y = onehot(Y)
+def BackPropagation(z1, a1, z2, a2, w1, w2, X, Y):     # mention to stackExchange for helping me out 
+    m = Y.size                                         # with these formulas for higher order matrices
+    one_hot_Y = one_hot(Y)
     dz2 = a2 - one_hot_Y
     dw2 = (1/m) * np.dot(dz2, a1.T)
     db2 =  (1/m) * np.sum(dz2, axis = 1, keepdims = True)
 
     dz1 = np.dot(w2.T, dz2) * derivative_reLU(z1)
-    dw1 = (1/m) * dot(dz1, X.T)
+    dw1 = (1/m) * np.dot(dz1, X.T)
     db1= (1/m) * np.sum(dz1, axis = 1, keepdims  = True)
     
-    return dw1, dw2, db1, db2
+    return dw1, db1, dw2, db2
 
-def update_parameters(w1, b1, w2, b2, dw1, dw2, db1, db2, learning_rate):
+def update_parameters(w1, b1, w2, b2, dw1, db1, dw2, db2, learning_rate):
     w1 = w1 - learning_rate * dw1
     w2 = w2 - learning_rate * dw2
     b1 = b1 - learning_rate * db1
@@ -83,31 +92,31 @@ def update_parameters(w1, b1, w2, b2, dw1, dw2, db1, db2, learning_rate):
     return w1, b1, w2, b2
 
 def predict(A2):
-    return np.argmax(A2)
+    return np.argmax(A2, 0)
 
-def get_acuracy(predictions, Y):
-    return np.mean(predictions == Y)
+def get_accuracy(predictions, Y):
+    return np.sum(predictions == Y)/Y.size
 
-def gradient_descent(X, Y, learning_rate, iteration):
-    w1, w2, b1, b2 = Initialise()
+def gradient_descent(X, Y, learning_rate, iterations):
+    w1, b1, w2, b2 = Initialise()
     
-    for i in range(iteration):
-        Z1, A1, Z2, A2 = Forward(w1, w2, b1, b2, X)
+    for i in range(iterations + 1):
+        Z1, A1, Z2, A2 = Forward(w1, b1, w2, b2, X)
 
-        dw1, dw2, db1, db2 = BackPropagation(Z1, Z2, A1, A2, w1, w2, X, Y)
+        dw1, db1, dw2, db2 = BackPropagation(Z1, A1, Z2, A2, w1, w2, X, Y)
 
-        w1, b1, w2, b2 = update_parameters(w1, b1, w2, b2, dw1, dw2, db1, db2, learning_rate)
+        w1, b1, w2, b2 = update_parameters(w1, b1, w2, b2, dw1, db1, dw2, db2, learning_rate)
 
         if i%50 == 0:
             predictions = predict(A2)
-            accuracy = get_acuracy(predictions, Y)
+            accuracy = get_accuracy(predictions, Y)
             print(f"Iteration: {i} | Accuracy: {accuracy * 100:.2f}%")
         
     return w1, b1, w2, b2
 
 if __name__ == "__main__":
     print("Loading data...")
-    X_train, Y_train, X_dev, Y_dev = load_data('mnist_train.csv')
+    train_X, train_Y, test_X, test_Y = load_csv('mnist_test.csv')
     
     print("Starting training...")
-    W1, b1, W2, b2 = gradient_descent(X_train, Y_train, alpha=0.1, iterations=500)
+    W1, b1, W2, b2 = gradient_descent(train_X, train_Y, learning_rate = 0.1, iterations = 500)
