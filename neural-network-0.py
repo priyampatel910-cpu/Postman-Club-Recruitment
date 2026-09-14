@@ -1,12 +1,13 @@
 import numpy as np
 import pandas as pd
+import os
 
 """
 This is my first attempt at building neural network, and I have made almost entire code by myself(except some
  code blocks, which I will mention), and so, for the sake of simplicity, I am making this network with 
 only 1 hidden layer as:
 
-        Input Layer(784 paremeters) -------> hidden layer(10 neurons) ----------> output layer(10 activations)
+        Input Layer(784 paremeters) -------> hidden layer(64 neurons) ----------> output layer(10 activations)
 
 With this model, I asked Gemini to predict the success rate, and Gemini adivisis me to target atleast 80% 
 
@@ -34,11 +35,27 @@ def load_csv(file_path):
 np.random.seed(0)
 
 def Initialise():
-    w1 = np.random.randn(64, 784) * 0.1
+    W1 = np.random.randn(64, 784) * 0.1
     b1 = np.random.randn(64, 1) * 0.1             #      Used * 0.1 to make sure x*w is small
-    w2  = np.random.randn(10, 64) * 0.1           #      and it dose not gets enlarged in the operation
+    W2 = np.random.randn(10, 64) * 0.1            #      and it dose not gets enlarged in the operation
     b2 = np.random.randn(10, 1) * 0.1
-    return w1, b1, w2, b2
+    return W1, b1, W2, b2
+
+def InitialiseOrLoad(filename='trained_weights.npz'):
+    if os.path.exists(filename):
+        print("Saved data from previous training found! Loading...")
+        saved_data = np.load(filename)
+    
+        W1 = saved_data['W1']
+        b1 = saved_data['b1']
+        W2 = saved_data['W2']
+        b2 = saved_data['b2']
+
+    else:
+        print("No trained data found, initialising random weights and biases...")
+        W1, b1, W2, b2 = Initialise()
+
+    return W1, b1, W2, b2
 
 def reLU(x):
     return np.maximum(x, 0)
@@ -54,14 +71,14 @@ def softmax(Z):
     return exp_Z / np.sum(exp_Z, axis=0, keepdims=True)
 
 
-def Forward(w1, b1, w2, b2, X):
+def Forward(W1, b1, W2, b2, X):
 
     # Layer 1 (Hideen)     
-    z1 = np.dot(w1, X) + b1
+    z1 = np.dot(W1, X) + b1
     a1 = reLU(z1)
 
     # Layer 2 (Output)
-    z2 = np.dot(w2, a1) + b2
+    z2 = np.dot(W2, a1) + b2
     a2 = softmax(z2)
 
     return z1, a1, z2, a2
@@ -70,26 +87,26 @@ def Forward(w1, b1, w2, b2, X):
 def derivative_reLU(z):
     return z > 0                # In numpy, this condition returns boolean, which is matrix of 1s or 0s
     
-def BackPropagation(z1, a1, z2, a2, w1, w2, X, Y):     # mention to stackExchange for helping me out 
+def BackPropagation(z1, a1, z2, a2, W1, W2, X, Y):     # mention to stackExchange for helping me out 
     m = Y.size                                         # with these formulas for higher order matrices
     one_hot_Y = one_hot(Y)
     dz2 = a2 - one_hot_Y
-    dw2 = (1/m) * np.dot(dz2, a1.T)
+    dW2 = (1/m) * np.dot(dz2, a1.T)
     db2 =  (1/m) * np.sum(dz2, axis = 1, keepdims = True)
 
-    dz1 = np.dot(w2.T, dz2) * derivative_reLU(z1)
+    dz1 = np.dot(W2.T, dz2) * derivative_reLU(z1)
     dw1 = (1/m) * np.dot(dz1, X.T)
     db1= (1/m) * np.sum(dz1, axis = 1, keepdims  = True)
     
-    return dw1, db1, dw2, db2
+    return dw1, db1, dW2, db2
 
-def update_parameters(w1, b1, w2, b2, dw1, db1, dw2, db2, learning_rate):
-    w1 = w1 - learning_rate * dw1
-    w2 = w2 - learning_rate * dw2
+def update_parameters(W1, b1, W2, b2, dw1, db1, dW2, db2, learning_rate):
+    W1 = W1 - learning_rate * dw1
+    W2 = W2 - learning_rate * dW2
     b1 = b1 - learning_rate * db1
     b2 = b2 - learning_rate * db2
 
-    return w1, b1, w2, b2
+    return W1, b1, W2, b2
 
 def predict(A2):
     return np.argmax(A2, 0)
@@ -98,21 +115,21 @@ def get_accuracy(predictions, Y):
     return np.sum(predictions == Y)/Y.size
 
 def gradient_descent(X, Y, learning_rate, iterations):
-    w1, b1, w2, b2 = Initialise()
+    W1, b1, W2, b2 = InitialiseOrLoad()
     
     for i in range(iterations + 1):
-        Z1, A1, Z2, A2 = Forward(w1, b1, w2, b2, X)
+        Z1, A1, Z2, A2 = Forward(W1, b1, W2, b2, X)
 
-        dw1, db1, dw2, db2 = BackPropagation(Z1, A1, Z2, A2, w1, w2, X, Y)
+        dw1, db1, dW2, db2 = BackPropagation(Z1, A1, Z2, A2, W1, W2, X, Y)
 
-        w1, b1, w2, b2 = update_parameters(w1, b1, w2, b2, dw1, db1, dw2, db2, learning_rate)
+        W1, b1, W2, b2 = update_parameters(W1, b1, W2, b2, dw1, db1, dW2, db2, learning_rate)
 
         if i%50 == 0:
             predictions = predict(A2)
             accuracy = get_accuracy(predictions, Y)
             print(f"Iteration: {i} | Accuracy: {accuracy * 100:.2f}%")
         
-    return w1, b1, w2, b2
+    return W1, b1, W2, b2
 
 if __name__ == "__main__":
     print("Loading data...")
@@ -120,3 +137,7 @@ if __name__ == "__main__":
     
     print("Starting training...")
     W1, b1, W2, b2 = gradient_descent(train_X, train_Y, learning_rate = 0.1, iterations = 500)
+
+    np.savez('trained_weights.npz', W1=W1, b1=b1, W2=W2, b2=b2)
+    print("Network memory saved successfully!")
+
