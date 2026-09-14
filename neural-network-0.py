@@ -55,10 +55,13 @@ def Forward(w1, w2, b1, b2, X):
     z2 = np.dot(w2, a1) + b2
     a2 = softmax(z2)
 
-def derivative_reLU(z)
+    return z1, a1, z2, a2
+
+
+def derivative_reLU(z):
     return z > 0                # In numpy, this condition returns boolean, which is matrix of 1s or 0s
     
-def BackPropagation(z1, z2, a1, a2,w1 w2,X, Y):     # mention to stackExchange for helping me out 
+def BackPropagation(z1, z2, a1, a2,w1, w2,X, Y):     # mention to stackExchange for helping me out 
     m = Y.size                                      # with these formulas for higher order matrices
     one_hot_Y = onehot(Y)
     dz2 = a2 - one_hot_Y
@@ -79,3 +82,32 @@ def update_parameters(w1, b1, w2, b2, dw1, dw2, db1, db2, learning_rate):
 
     return w1, b1, w2, b2
 
+def predict(A2):
+    return np.argmax(A2)
+
+def get_acuracy(predictions, Y):
+    return np.mean(predictions == Y)
+
+def gradient_descent(X, Y, learning_rate, iteration):
+    w1, w2, b1, b2 = Initialise()
+    
+    for i in range(iteration):
+        Z1, A1, Z2, A2 = Forward(w1, w2, b1, b2, X)
+
+        dw1, dw2, db1, db2 = BackPropagation(Z1, Z2, A1, A2, w1, w2, X, Y)
+
+        w1, b1, w2, b2 = update_parameters(w1, b1, w2, b2, dw1, dw2, db1, db2, learning_rate)
+
+        if i%50 == 0:
+            predictions = predict(A2)
+            accuracy = get_acuracy(predictions, Y)
+            print(f"Iteration: {i} | Accuracy: {accuracy * 100:.2f}%")
+        
+    return w1, b1, w2, b2
+
+if __name__ == "__main__":
+    print("Loading data...")
+    X_train, Y_train, X_dev, Y_dev = load_data('mnist_train.csv')
+    
+    print("Starting training...")
+    W1, b1, W2, b2 = gradient_descent(X_train, Y_train, alpha=0.1, iterations=500)
