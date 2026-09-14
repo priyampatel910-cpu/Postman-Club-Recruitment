@@ -86,7 +86,7 @@
 |The variables of my code (dW1, dW2) were not been able to import to PyTorch code | Reason is, name of my code has hyphen in, which python always treats as minus sign. To avoid this, make a new python file in your folder and copy paste the code. Now import the variables.|
 
 # Epilogue
-To be honest, this was a very interesting project. On Saturday, I felt overwhelmed by the math and complex algorithm, but eventually got to understand it's essence. This project helped me grasp fundamentals of aconcept that can be applied to such a diversity. To be frank, I chose this project, because I knew from the surface level, that it is an extremely powerful algorithm in machine learning, and now I have basis for that belief.
+To be honest, this was a very interesting project. On Saturday, I felt overwhelmed by the math and complex algorithm, but eventually got to understand it's essence. This project helped me grasp fundamentals of aconcept that can be applied to such a diversity. To be frank, I chose this project, because I knew from the surface level, that it is an extremely powerful algorithm in machine learning, and now I have basis for that belief. I didn't know beforce now, that linear algebra has such an elegant application
 
 About task 1.4, I did not have enough time to learn and code in PyTorch, so I used ChatGPT codex to code that for me, which then I used to compare gradient matrix values of my code and the PyTorch code by importing dW1, dW2 from my code to PyTorch code. As mentioned above, there will be error if you directly import it, but following the fix of the problem, you will be able to see for yourself too.
 
