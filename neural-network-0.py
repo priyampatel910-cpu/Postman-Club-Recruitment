@@ -56,16 +56,26 @@ def Forward(w1, w2, b1, b2, X):
     a2 = softmax(z2)
 
 def derivative_reLU(z)
-    return z > 0                      # In numpy, this condition returns boolean, which is matrix of 1s or 0s
+    return z > 0                # In numpy, this condition returns boolean, which is matrix of 1s or 0s
     
-def BackPropagation(z1, z2, a1, a2,w1 w2,X, Y):
-    m = Y.size
+def BackPropagation(z1, z2, a1, a2,w1 w2,X, Y):     # mention to stackExchange for helping me out 
+    m = Y.size                                      # with these formulas for higher order matrices
     one_hot_Y = onehot(Y)
-    diff_z2 = a2 - one_hot_Y
-    d_w2 = (1/m) * np.dot(diff_z2, a1.T)
-    d_b2 =  (1/m) * np.sum(diff_z2, axis = 1)
+    dz2 = a2 - one_hot_Y
+    dw2 = (1/m) * np.dot(dz2, a1.T)
+    db2 =  (1/m) * np.sum(dz2, axis = 1, keepdims = True)
 
-    diff_z1 = np.dot(w2.T, diff_z2) * derivative_reLU(z1)
-    d_w1 = (1/m) * dot(diff_z1, X.T)
-    d_b1= (1/m) * np.sum(diff_z1, axis = 1)
-    pass
+    dz1 = np.dot(w2.T, dz2) * derivative_reLU(z1)
+    dw1 = (1/m) * dot(dz1, X.T)
+    db1= (1/m) * np.sum(dz1, axis = 1, keepdims  = True)
+    
+    return dw1, dw2, db1, db2
+
+def update_parameters(w1, b1, w2, b2, dw1, dw2, db1, db2, learning_rate):
+    w1 = w1 - learning_rate * dw1
+    w2 = w2 - learning_rate * dw2
+    b1 = b1 - learning_rate * db1
+    b2 = b2 - learning_rate * db2
+
+    return w1, b1, w2, b2
+
