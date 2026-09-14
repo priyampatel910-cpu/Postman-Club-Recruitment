@@ -22,13 +22,6 @@
 >> Input Layer -----> Hidden layer (64 neurons) ----> Output layer
 >>
 >> This would result in a not-so-very efficient network with success rate of about 0.85 to 0.9 according to Gemini's prediction
->
-> 
->### Problems faced
-> > Could not implement the one-hot function by myself. Fixed.
-> > Code becomes very complex and messy very quickly; difficulty in keeping track of all variables and function parameters. Still not sure about them all, as the network is yet to be tested
-> > Forgot backprop formulas. Revisited the handwritten notes I made yesterday. Fixed.
-> > Still not very comfortable with shapes; have to think about them while writing every operation. **NOT FIXED**
 
 
 ## Day 3 - Monday, September 14
