@@ -4,7 +4,7 @@
 Python 3.10+ · numpy · matplotlib · pandas · torch (reference)
 
 ## Installation
-    pip install -r requirements.txt
+    pip install <required library>
 
 ## Running the code
  Every thing is vey simplified so that the code runs smoothly.
