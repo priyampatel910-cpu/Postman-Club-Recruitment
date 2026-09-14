@@ -17,7 +17,7 @@
 
 > ### The Algorithm for Neural Netwrok v0
 >
->> This version will be simple as I am new to all this and also due due to time constraint I am facing. It will contain only 1 hidden layer and would have this structure:
+>> This version will be simple, as I am new to all this and also due due to the time constraint I am facing. It will contain only 1 hidden layer and will have this structure:
 >>
 >> Input Layer -----> Hidden layer (64 neurons) ----> Output layer
 >>
@@ -25,16 +25,16 @@
 >
 > 
 >### Problems faced
-> > Could not implement onehot function by myself. Fixed.
-> > Code becomes very complex and messy very quickly, difficulty in keeping track of all variables and function parameters. Still not sure about them all, as network is yet to test
+> > Could not implement the one-hot function by myself. Fixed.
+> > Code becomes very complex and messy very quickly; difficulty in keeping track of all variables and function parameters. Still not sure about them all, as the network is yet to be tested
 > > Forgot backprop formulas. Revisited the handwritten notes I made yesterday. Fixed.
-> > Still not very comfortable with shapes, have to think about them while writing every operation. **NOT FIXED**
+> > Still not very comfortable with shapes; have to think about them while writing every operation. **NOT FIXED**
 
 
 ## Day 3 - Monday, September 14
 
 > ### Maths behind backprop
-> Before starting with today's progress, let me present you the math behind the curtains
+> Before starting with today's progress, let me present you with the math behind the curtains
 > We will start by deriving results for a simple network, and intuitively apply that to a complex network
 > > #### For a simple scenario
 > > Consider a neural network as : Input layer (1 parameter) ----> Hidden layer (1 neuron) ----> Output layer (1 neuron)
@@ -49,27 +49,28 @@
 > >  
 > >  where $$w$$ are weights of layers, $$b$$ is the bias, $$z^{[l]} = w^{[l]}a^{[l-1]} + b^{[l]}$$ and $$a$$ is the activation after putting $$z$$ in a non linearity
 > >
-> > Like these, we can derive contribution of any factor to the loss function by chain rule, which is used by computer to nudge these values in order to minimize loss function. But this is in form of scalars here, won't it be overly complex in real neural network with matrices and thousands of parameters? Well, not so much.
+> > Like these, we can derive the contribution of any factor to the loss function by the chain rule, which is used by computers to nudge these values in order to minimize the loss function. But this is in the form of scalars here; won't it be overly complex in a real neural network with matrices and thousands of parameters? Well, not so much.
 > >
 > > ### For an actual network
-> > Consider the structure network I made for this project. Now I will use capital letters for variables as, now they are matrices, but still, chain rule is valid here too.
+> > Consider the network structure I made for this project. Now I will use capital letters for variables, as they are now matrices, but the chain rule is valid here too.
 > >
 > >  $$\frac{\partial L}{\partial Z^{[2]}} = A^{[2]} - Y$$
 > >
 > > $$\frac{\partial L}{\partial W^{[2]}} = \frac{1}{m} dZ^{[2]} \cdot (A^{[1]})^T$$
 > >
-> > It is essentially the same chain rule as the simplified case, but now that there are matrices, we have to use trnaspose to match the shapes, rest all same
+> > It is essentially the same chain rule as the simplified case, but now that there are matrices, we have to use the transpose to match the shapes; the rest is all the same
 > >
 > > $$\frac{\partial L}{\partial b^{[2]}} = \frac{1}{m} \sum_{i=1}^{m} dZ^{[2]}$$
 > >
 > > $$\frac{\partial L}{\partial Z^{[1]}} = (W^{[2]})^T \cdot dZ^{[2]} * f'(Z^{[1]})$$
 > >
-> > Okay. so this is the math, now let's jump into coding.
+> > Okay. So this is the math; now let's jump into coding.
 > >
 > ### Coding Progress
-> > Completed the code today, adding backpropagation entirely and gradient descent function.
-> > Also added as tracker, which tracks accuracy every 50 iterations
+> > Completed the code today, adding backpropagation entirely and a gradient descent function.
+> > Also added a tracker, which tracks accuracy every 50 iterations
 > >
-> > Faced errors causing the accuracy to be 11% at 1st as well as 500th iteration. **Fixed**: Caused due to error in order of parameters given to `update_parameters()` functions. I now used the same sequence for parameters to not get confused.
+> > Faced errors causing the accuracy to be 11% at the 1st as well as 500th iteration. **Fixed**: Caused by an error in the order of parameters given to the `update_parameters()` function. I now use the same sequence for parameters so as not to get confused.
 > >
+> > As I had some extra time, I added a feature where the tuned weights and biases are stored in the same folder in `.npz` format. I found from browsing that an `npz` file would be way faster for NumPy to read compared to a spreadsheet or `.csv` file
 > > 
