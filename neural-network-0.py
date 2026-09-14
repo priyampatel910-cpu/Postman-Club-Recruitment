@@ -131,6 +131,8 @@ def gradient_descent(X, Y, learning_rate, iterations):
         
     return W1, b1, W2, b2
 
+print()
+
 if __name__ == "__main__":
     print("Loading data...")
     train_X, train_Y, test_X, test_Y = load_csv('mnist_test.csv')
