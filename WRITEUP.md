@@ -1,4 +1,4 @@
-# Postman-Club-Recruitment
+# Postman Club Recruitment Writeup
 ## Day 1 - Saturday, September 12
 
 > I learnt about neural networks by watching videos of 3b1b and got the basic mathematical idea of its calculas.
@@ -21,7 +21,7 @@
 >>
 >> Input Layer -----> Hidden layer (64 neurons) ----> Output layer
 >>
->> This would result in a not-so-very efficient network with success rate of about 0.8 to 0.85 according to Gemini's prediction
+>> This would result in a not-so-very efficient network with success rate of about 0.85 to 0.9 according to Gemini's prediction
 >
 > 
 >### Problems faced
@@ -73,4 +73,21 @@
 > > Faced errors causing the accuracy to be 11% at the 1st as well as 500th iteration. **Fixed**: Caused by an error in the order of parameters given to the `update_parameters()` function. I now use the same sequence for parameters so as not to get confused.
 > >
 > > As I had some extra time, I added a feature where the tuned weights and biases are stored in the same folder in `.npz` format. I found from browsing that an `npz` file would be way faster for NumPy to read compared to a spreadsheet or `.csv` file
-> > 
+> >
+# Some errors and problems faced by me
+> 
+| Problem  |  Fix  |
+|----------|-------|
+|Importing and processing the MNIST csv file.| Imported Samson Zhuang's method for the same, also understood why his method is effective|
+|Understanding the need on onehot and how to implement it as a code| Significance explained by ChatGPT and imported code from geeksforgeeks|
+|Shape error in backpropagation| Recursive debugging and improvising, some know-how taken from stackoverflow as well|
+|While running the code, the accuracy stays at 11.18% after 0 iteration as well as after 500 iterations | Softmax function was not working properly, as $$e^{n}$$ was overflowing resulting in NaN, so the model was not improving. Corrected by substracting the max logit first as : `z = z - z.max(axis=1, keepdims=True)`
+|Even after implementing the above change, the network was stuck at 11.18%| After much debugging, found that the function parameters of `gradient_descent()` were in incorrect order|
+|The variables of my code (dW1, dW2) were not been able to import to PyTorch code | Reason is, name of my code has hyphen in, which python always treats as minus sign. To avoid this, make a new python file in your folder and copy paste the code. Now import the variables.|
+
+# Epilogue
+To be honest, this was a very interesting project. On Saturday, I felt overwhelmed by the math and complex algorithm, but eventually got to understand it's essence. This project helped me grasp fundamentals of aconcept that can be applied to such a diversity. To be frank, I chose this project, because I knew from the surface level, that it is an extremely powerful algorithm in machine learning, and now I have basis for that belief.
+
+About task 1.4, I did not have enough time to learn and code in PyTorch, so I used ChatGPT codex to code that for me, which then I used to compare gradient matrix values of my code and the PyTorch code by importing dW1, dW2 from my code to PyTorch code. As mentioned above, there will be error if you directly import it, but following the fix of the problem, you will be able to see for yourself too.
+
+<p align="center">Thank You</p>
