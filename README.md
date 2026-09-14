@@ -7,10 +7,10 @@ Python 3.10+ · numpy · matplotlib · pandas · torch (reference)
     pip install -r requirements.txt
 
 ## Running the code
-    Every thing is vey simplified so that the code runs smoothly.
+ Every thing is vey simplified so that the code runs smoothly.
     Just make sure MNIST csv file is in same folder as the code file. 
     I Recommend to run this code on terminal
-    After first run, a `trained_weights.npz` file will be created and after every run, it will be modified to increase accuracy of the network
+    After first run, a `trained_weights.npz` file will be created and after every run, it will be modified to increase accuracy of the network. Can't think of anything else. But if you 
 
 
 
@@ -23,7 +23,7 @@ Python 3.10+ · numpy · matplotlib · pandas · torch (reference)
 layer and include the mathematics in your write-up or code comments. - **Complete**
 
 1.4 Check your gradients against torch.autograd or numerical gradient checking. Your results
-should match within a reasonable tolerance. - **Complete** (delta between the matrices are in range $$10^{-6}$$ to $$10^{-8}$$ which are acceptable)
+should match within a reasonable tolerance. - **Complete** (delta between the matrices are in range $$10^{-6}$$ to $$10^{-8}$$ which are acceptable, as there are currently some bugs in NumPy I guess, which causes responses like 10.000000000001 (actual output = 10))
 
 1.5 Train the network on a small real task, such as a reduced MNIST dataset or a simple classifi-
 cation or regression dataset. Show that the loss decreases during training. - **Complete** (Using MNIST dataset)
@@ -32,9 +32,14 @@ cation or regression dataset. Show that the loss decreases during training. - **
 fixed them. - **Complete**
 
 ## References
-*Neural Networks and Deep Learning* by Nielsen
-3B1B
-StackOverflow
-Gemini, ChatGPT
-References for code implementation are given within code in comments
+* *Neural Networks and Deep Learning* by Nielsen
+* 3B1B
+* StackOverflow
+* Gemini, ChatGPT
+* GeeksForGeeks
+* Github
+* Samson Zhuang(Youtube)
+* Tech With Tim(Youtube)
+* W3Schools
+* References for code implementation are also given within code as comments
 
