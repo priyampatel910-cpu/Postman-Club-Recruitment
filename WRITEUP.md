@@ -91,3 +91,5 @@ To be honest, this was a very interesting project. On Saturday, I felt overwhelm
 About task 1.4, I did not have enough time to learn and code in PyTorch, so I used ChatGPT codex to code that for me, which then I used to compare gradient matrix values of my code and the PyTorch code by importing dW1, dW2 from my code to PyTorch code. As mentioned above, there will be error if you directly import it, but following the fix of the problem, you will be able to see for yourself too.
 
 <p align="center">Thank You</p>
+
+PS: Please give me some extra points for using latex. I spent 2 hours and a meltdown for that!
