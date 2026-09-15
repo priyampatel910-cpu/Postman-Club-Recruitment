@@ -7,7 +7,7 @@ Python 3.10+ · numpy · matplotlib · pandas · torch (reference)
     pip install <required library>
 
 ## Running the code
- Every thing is vey simplified so that the code runs smoothly.
+ Every thing is vey simplified so that the main code `neural-network-0.py` runs smoothly.
     Just make sure MNIST csv file is in same folder as the code file. 
     I Recommend to run this code on terminal
     After first run, a `trained_weights.npz` file will be created and after every run, it will be modified to increase accuracy of the network. Can't think of anything else. But if you 
